@@ -124,7 +124,7 @@ Idents(tmdata) <- tmdata$seurat_clusters
 setsN <- markers_ranked |>
   imap(~ .x %>% arrange(desc(Combined)) %>% slice_head(n = N) %>% pull(gene) %>% intersect(rownames(tmdata)))
 
-if (ncells > 50) {
+if (ncells > 100) {
   
   de <- FindAllMarkers(tmdata, only.pos = TRUE, min.pct = 0.2, logfc.threshold = lfc_th)
   universe <- rownames(tmdata)

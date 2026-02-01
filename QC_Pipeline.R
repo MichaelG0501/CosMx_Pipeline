@@ -47,9 +47,17 @@ expr <- as(expr, "CsparseMatrix")
 cosmx@assays$RNA$data <- expr
 
 cosmx_list <- SplitObject(cosmx, split.by = "coreid")
-print(names(cosmx_list))
 names(cosmx_list) <- unique(cosmx@meta.data$coreid)
-print(names(cosmx_list))
+
+cosmx <- FindVariableFeatures(cosmx)
+cosmx <- ScaleData(cosmx)
+cosmx <- RunPCA(cosmx)
+cosmx <- FindNeighbors(cosmx, dims = 1:20)
+cosmx <- FindClusters(cosmx, resolution = 0.8, algorithm = 1)
+cosmx$leiden_clusters <- Idents(cosmx)
+cosmx <- RunUMAP(cosmx, dims = 1:20)
+saveRDS(cosmx, "cosmx_merged.rds")
+
 rm(cosmx)
 gc()
 

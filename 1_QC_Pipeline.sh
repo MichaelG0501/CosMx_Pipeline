@@ -13,6 +13,7 @@ source activate /rds/general/user/sg3723/home/anaconda3/envs/dmtcp
 WD=/rds/general/project/tumourheterogeneity1/ephemeral/CosMx_Pipeline
 
 cd ${WD}
+mkdir -p cosmx_outs
 Rscript QC_Pipeline.R
 
 echo $(date +%T)

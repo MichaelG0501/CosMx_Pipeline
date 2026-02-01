@@ -16,7 +16,7 @@ for (sample in sample_dirs) {
   rds_path <- file.path("by_samples/", sample, paste0(sample, "_initial.rds"))
   if (file.exists(rds_path)) {
     tmdata_list[[sample]] <- readRDS(rds_path)
-    if (ncol(tmdata_list[[sample]]) < 50) {
+    if (ncol(tmdata_list[[sample]]) < 100) {
       tmdata_list[[sample]]$celltype_final <- rep("unresolved", ncol(tmdata_list[[sample]]))
     }
   } else {
@@ -366,6 +366,7 @@ for (sample in sample_dirs) {
   )
   count_list[[sample]] <- count_df
   
+  tmdata_list[[sample]] <- tmdata
   print(sample)
 }
 
@@ -393,3 +394,8 @@ count_mat <- count_all %>%
 
 saveRDS(pct_mat, file = "pct_mat.rds")
 saveRDS(count_mat, file = "count_mat.rds")
+
+combined_metadata <- bind_rows(lapply(tmdata_list, function(obj) {
+  return(obj@meta.data)
+}), .id = "sample_id")
+saveRDS(combined_metadata, "cosmx_merged_meta.rds")
